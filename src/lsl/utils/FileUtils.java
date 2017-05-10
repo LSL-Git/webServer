@@ -9,11 +9,10 @@ public class FileUtils {
 	DbUtils db = DbUtils.getInstance();
 	
 	/**
-	 * 根据路径，便利文件夹内的所用文件夹和文件
+	 * 把未标签化的图片文件夹，便利结果保存到数据库中
 	 * @param path
 	 */
-	public void traverseFolder2(String path) {
-		int level = 1;
+	public static void traverseFolder2(String path) {
         File file = new File(path);
         if (file.exists()) {
             File[] files = file.listFiles();
@@ -23,20 +22,13 @@ public class FileUtils {
             } else {
                 for (File file2 : files) {
                     if (file2.isDirectory()) {
-                        //System.out.println("文件夹:" + file2.getAbsolutePath());
-//                        int num = traverseFolder(file2.getAbsolutePath());
-//                        System.err.println("num = " + num);
-                        System.out.println("level = "+ level);
-//                        if (num == 0) {
-//							level++;
-//						}
-                        
+                        System.out.println(file2.getName());
                         //traverseFolder2(file2.getAbsolutePath());	// 递归
                     } else {
-                    	// 把便利结果保存到数据库中
-                    	//DbUtils.SaveUnfinishedImg(file2.getName(),"lsl");
-//                        System.out.println("文件:" + file2.getAbsolutePath());
-//                        System.out.println("文件:" + file2.getName());
+                    	DbUtils.getInstance();
+                    	DbUtils.SaveUnfinishedImg(file2.getName(),"lsl");
+
+                        System.out.println("文件:" + file2.getName());
                     }
                 }
             }

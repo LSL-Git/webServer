@@ -6,9 +6,9 @@ public class Values {
 	public static final String USER = "root";
 	public static final String PASSWORD = "123";
 	// 用户头像存放路径
-	public static final String UserIconPath = "H:/Images/用户头像/User/"; 
-	public static final String UnfinishedIconPath = "H:/Images/未完成";
-	public static final String FINISHICONPATH = "H:/Images/已完成";
+	public static final String UserIconPath = "D:/Images/用户头像/User/"; 
+	public static final String UnfinishedIconPath = "D:/Images/未完成";
+	public static final String FINISHICONPATH = "D:/Images/已完成";
 	
 	// *******************用户信息*************************
 	public static final String CR_USER_TB = "create table user_tb(" +
@@ -59,7 +59,7 @@ public class Values {
 	
 	// *********************已标签化完成**************************************
 
-	// 第一层分类
+/*	// 第一层分类
 	public static final String CR_CLASS1_TB = "create table class1_tb(" +
 											"id int auto_increment primary key," +
 											"class1_name varchar(50) not null," +
@@ -81,7 +81,7 @@ public class Values {
 	public static final String CLASS2_TB = "class2_tb";
 	public static final String CLASS2_ID = "id";
 //	public static final String PARENT_ID = "parent_id";
-	public static final String CLASS2_NAME = "class2_name";
+	public static final String CLASS2_NAME = "class2_name";*/
 	//
 	
 	public static final String CR_FOLDER_TB = "CREATE TABLE folder_tb(" +
@@ -102,12 +102,14 @@ public class Values {
 	// 未完成标签化
 	public static final String CR_UNFINISHED_TB = "create table unfinished_tb(" +
 												"id int auto_increment primary key," +
-												"img_name varchar(255)," +
+												"img_name varchar(255) not null," +
 												"uploader varchar(50) not null," +
-												"num int default '1')";
+												"upload_time varchar(255) not null)";
+	
 	public static final String UNFINISHED_TB = "unfinished_tb";
 	public static final String IMG_NAME = "img_name";
 	public static final String UPLOADER = "uploader";
+	public static final String UPLOAD_TIME = "upload_time";
 	
 
 	

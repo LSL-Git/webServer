@@ -93,6 +93,8 @@ public class DbUtils {
 			// 创建未完成标签化图片表
 			if (!statement.execute(Values.CR_UNFINISHED_TB)) {	
 				System.out.println("未完成标签化表创建成功");
+				// 将未标签化的图片信息保存到数据库
+				FileUtils.traverseFolder2(Values.UnfinishedIconPath);
 			}
 		} catch (Exception e) {}
 	}
@@ -314,8 +316,13 @@ public class DbUtils {
 	 * @return
 	 */
 	public static boolean SaveUnfinishedImg(String img_name, String uploader) {
+		// 或取当地时间，并格式化
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH-mm-ss");
+		String NowTime = sdf.format(new Date());
+		
 		String SQL_Insert_Img_Name = "insert into " + Values.UNFINISHED_TB + " values " +
-				"(0,'" + img_name + "','" + uploader + "', 1)";
+				"(0,'" + img_name + "','" + uploader + "','" + NowTime + "')";
+		System.out.println(SQL_Insert_Img_Name);
 		int row = 0;
 		try {
 			row = statement.executeUpdate(SQL_Insert_Img_Name);

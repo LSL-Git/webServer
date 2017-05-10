@@ -19,11 +19,12 @@ public class test {
 		// 将已完成标签化的图片全部保存到数据库
 //		savefileinfo();
 	
+//		FileUtils.traverseFolder2(Values.UnfinishedIconPath);
 		
 		
-		DbUtils.getInstance();
+//		DbUtils.getInstance();
 //		DbUtils.GetParentFolder("", 1, 6);
-		System.out.println(DbUtils.GetImgInfo("海滩1.jpg"));	// 查询一张图片的详细信息
+//		System.out.println(DbUtils.GetImgInfo("海滩1.jpg"));	// 查询一张图片的详细信息
 //		DbUtils.GetParentFolder("公车站");
 //		DbUtils.GetInFolderInfo("公车站");
 //		DbUtils.GetFolderInfo(2);
