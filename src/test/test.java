@@ -6,8 +6,10 @@ import java.util.Map;
 
 import org.json.JSONObject;
 
+import lsl.base.Base64Image;
 import lsl.utils.DbUtils;
 import lsl.utils.FileUtils;
+import lsl.utils.ImgUtils;
 import lsl.values.Values;
 
 public class test {
@@ -20,9 +22,26 @@ public class test {
 //		savefileinfo();
 	
 //		FileUtils.traverseFolder2(Values.UnfinishedIconPath);
-		
+		DbUtils.getInstance();
+		System.out.println("name = " + DbUtils.QueryUserAll("1").get(Values.USER_NAME));
+
+//		JSONObject json = ImgUtils.getImg("atm2.jpg");
+//		Base64Image.GenerateImage(json.getString("imgStr"), "D:/jj.jpg");
 		
 //		DbUtils.getInstance();
+//		JSONObject json  = ImgUtils.getImgUrl();
+//		int num = json.getInt("num") - 1;
+//		System.out.println(num);
+//		
+//		while(num >= 0) {
+//			System.out.println(num + " : " + json.getJSONObject("img" + num));
+//			num--;
+//		}
+		
+		
+		
+//		System.out.println(json.get("img_name4"));
+		
 //		DbUtils.GetParentFolder("", 1, 6);
 //		System.out.println(DbUtils.GetImgInfo("海滩1.jpg"));	// 查询一张图片的详细信息
 //		DbUtils.GetParentFolder("公车站");

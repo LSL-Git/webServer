@@ -16,9 +16,6 @@ import lsl.values.Values;
 
 import org.json.JSONObject;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
-
 public class DbUtils {
 	
 	private static DbUtils instance = null;
@@ -98,6 +95,38 @@ public class DbUtils {
 			}
 		} catch (Exception e) {}
 	}
+	
+	
+	/**
+	 * 获取未标签化表的说有信息
+	 * @return
+	 */
+	public static JSONObject GetImgJson() {
+		JSONObject json = null;
+		Map<String, Object> map = new HashMap<String, Object>();
+		int num = 0;
+		String SQL_Query_Get_Img = "select * from " + Values.UNFINISHED_TB;
+		
+		try {
+			ResultSet re = statement.executeQuery(SQL_Query_Get_Img);
+			while (re.next()) {
+				map.put("id" + num, re.getString(1));
+				map.put("img_name" + num, re.getString(2));
+				map.put("uploader" + num, re.getString(3));
+				map.put("upload_time" + num, re.getString(4));
+				
+				num++;
+			}
+			re.close();
+		} catch (Exception e) {
+			System.err.println("GetImgJson: Err->" + e.getMessage());
+		}
+		map.put("num", num);
+		json = new JSONObject(map);
+
+		return json;
+	}
+	
 	
 	/**
 	 * 根据图片名称查询图片的详细信息,返回json
@@ -349,8 +378,9 @@ public class DbUtils {
 		
 		String RESULT = "Register_Fail";
 		// 插入用户信息的SQL语句
-		String SQL_Insert = "insert into " + Values.USER_TB + " values (0,'" + name + "','" + psw + "','" + tel 
-		+ "','" + email + "'," + integral + ",'" + icon_name + "','" + task + "'," + is_manager +")";
+		String SQL_Insert = "insert into " + Values.USER_TB + " values(0,'" + name + "','" + psw + "','" + tel + 
+		"','" + email + "'," + integral + ",'" + icon_name + "','" + task + "',0,0,0)";
+		
 		// 查询用户是否存在
 		String SQL_Query_Uname = "select " + Values.USER_NAME + " from " + Values.USER_TB + " where " + Values.USER_NAME + " = '" + name + "'";
 		
@@ -426,22 +456,24 @@ public class DbUtils {
 		try {
 			ResultSet ResultStr = statement.executeQuery(SQL_Query_All);
 			while (ResultStr.next()) {
-				map.put("user_name", ResultStr.getString(2));
-				map.put("user_psw", ResultStr.getString(3));				
-				map.put("user_tel", ResultStr.getString(4));
-				map.put("user_mail", ResultStr.getString(5));
-				map.put("user_integral", ResultStr.getString(6));
+				map.put(Values.USER_ID, ResultStr.getString(1));
+				map.put(Values.USER_NAME, ResultStr.getString(2));
+				map.put(Values.USER_PSW, ResultStr.getString(3));				
+				map.put(Values.USER_TEL, ResultStr.getString(4));
+				map.put(Values.USER_EMAIL, ResultStr.getString(5));
+				map.put(Values.USER_INTEGRAL, ResultStr.getString(6));
 				// 获取头像文件
-				ImgPath += ResultStr.getString(7) + ".jpg";
+				String icon_name = ResultStr.getString(7);
+				ImgPath += icon_name;
 				// 加密头像文件
 				String Img = Base64Image.getImageStr(ImgPath);
-				map.put("user_icon", Img);
-				
-				map.put("task_completion", ResultStr.getString(8));
-				map.put("is_manager", ResultStr.getString(9));
-				
-				// 将用户信息封装到json对象中
-				json = new JSONObject(map);
+				map.put(Values.USER_ICON, icon_name);
+				map.put("icon_code",Img);				
+				map.put(Values.USER_TASK_COMPLETION, ResultStr.getString(8));
+				map.put(Values.IS_MANAGER, ResultStr.getString(9));
+				map.put(Values.USER_LABEL_ALL_NUM, ResultStr.getString(10));
+				map.put(Values.USER_LABEL_SUCCESS_NUM, ResultStr.getString(11));
+
 			}
 			
 			ResultStr.close();	
@@ -449,6 +481,10 @@ public class DbUtils {
 		} catch (Exception e) {
 			System.err.println("QueryUserAll: Err->" + e.getMessage());
 		}
+		
+		// 将用户信息封装到json对象中
+		json = new JSONObject(map);
+		
 		// 返回json对象
 		return json;
 	}
@@ -465,7 +501,7 @@ public class DbUtils {
 		String RESULT = "Update_Fail";
 		
 		String SQL_Update = "update " + Values.USER_TB + " set " + Values.USER_PSW + " = '" + psw
-		+ "', " + Values.USER_TEL + " = '" + tel + "', " + Values.USER_EMIL + " = '" + email
+		+ "', " + Values.USER_TEL + " = '" + tel + "', " + Values.USER_EMAIL + " = '" + email
 		+ "' where " + Values.USER_NAME + " = '" + name + "'";
 		
 		try {

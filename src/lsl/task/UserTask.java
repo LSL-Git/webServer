@@ -50,7 +50,7 @@ public class UserTask {
 		try {
 			DbUtils.getInstance();
 			// 保存用户信息
-			RESULT = DbUtils.SaveUserData(name, psw, tel, "xxx@xxx.com", 0, "default", "100%",0);
+			RESULT = DbUtils.SaveUserData(name, psw, tel, "", 0, "default.png", "0%",0);
 			
 		} catch (Exception e) {
 			e.printStackTrace();

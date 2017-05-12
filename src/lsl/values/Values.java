@@ -10,24 +10,35 @@ public class Values {
 	public static final String UnfinishedIconPath = "D:/Images/未完成";
 	public static final String FINISHICONPATH = "D:/Images/已完成";
 	
+	public final static String httpURL = "http://127.0.0.1/webServer/servlet/images?type=get&name=";
+	
 	// *******************用户信息*************************
-	public static final String CR_USER_TB = "create table user_tb(" +
-											"user_id int auto_increment primary key," +
-											"user_name varchar(20) not null," +
-											"user_psw varchar(10) not null," +
-											"user_tel varchar(12) not null," +
-											"user_mail varchar(20)," +
-											"user_integral int," +
-											"icon_name varchar(40)," +
-											"task_completion varchar(4)," +
-											"is_manager int default '0'," +
-											"unique(user_name))";
+	public static final String CR_USER_TB = "CREATE TABLE `user_tb` (" +
+			"`user_id`  int NOT NULL AUTO_INCREMENT ," +
+			"`user_name`  varchar(255) CHARACTER SET utf8 NOT NULL ," +
+			"`user_psw`  varchar(255) CHARACTER SET utf8 NOT NULL ," +
+			"`user_tel`  varchar(12) NOT NULL ," +
+			"`user_email`  varchar(255) CHARACTER SET utf8 NULL ," +
+			"`user_integral`  int NOT NULL DEFAULT 0 ," +
+			"`icon_name`  varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT 'default.png' ," +
+			"`task_completion`  varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '' ," +
+			"`is_manager`  int NOT NULL DEFAULT 0 ," +
+			"`label_all_num`  int NOT NULL DEFAULT 0 ," +
+			"`label_success_num`  int NOT NULL DEFAULT 0 ," +
+			"PRIMARY KEY (`user_id`))";
+	
+	public static final String USER_ID = "user_id";		// 用户id
+	public static final String USER_NAME = "user_name";	// 用户名
+	public static final String USER_PSW = "user_psw";	// 用户密码
+	public static final String USER_TEL = "user_tel";	// 用户电话号码
+	public static final String USER_EMAIL = "user_email";	// 用户邮箱
+	public static final String USER_INTEGRAL = "user_integral";	// 用户积分
+	public static final String USER_ICON = "icon_name";		// 用户头像名称
+	public static final String USER_TASK_COMPLETION = "task_completion";	// 用户任务完成情况
+	public static final String IS_MANAGER = "is_manager";	// 是否为管理员
+	public static final String USER_LABEL_ALL_NUM = "label_all_num";	// 总标签数
+	public static final String USER_LABEL_SUCCESS_NUM = "label_success_num";	// 标签成功数
 	public static final String USER_TB = "user_tb";
-	public static final String USER_NAME = "user_name";
-	public static final String USER_PSW = "user_psw";
-	public static final String USER_TEL = "user_tel";
-	public static final String USER_EMIL = "user_mail";
-	public static final String IS_MANAGER = "is_manager";
 	// *******************用户信息*************************
 	
 /*	// 管理员信息

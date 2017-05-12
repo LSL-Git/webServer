@@ -24,7 +24,7 @@ public class UserInfoServlet extends HttpServlet{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**更新URL
+	/**更新用户信息的URL
 	 * http://127.0.0.1/webServer/userinfo?user_name=regggr&type=update
 		&update_psw=1234&update_tel=1122344&update_email=22ddd3@qq.com*/
 	
@@ -50,7 +50,7 @@ public class UserInfoServlet extends HttpServlet{
 		
 		// 得到数据库实例
 		DbUtils.getInstance();
-		if (type.equals("query")) {
+		if (type.equals("query_user_info")) {
 			try {
 				resp.setCharacterEncoding("UTF-8");
 				resp.setContentType("text/json");
