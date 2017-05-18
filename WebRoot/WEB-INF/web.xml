@@ -44,14 +44,25 @@
   
   
   <servlet>
-    <description>获取图片信息</description>
+    <description>获取图片URL信息</description>
     <servlet-name>MainServlet</servlet-name>
-    <servlet-class>lsl.servlet.GetImageServlet</servlet-class>
+    <servlet-class>lsl.servlet.GetImgUrlServlet</servlet-class>
   </servlet>
-  
-  <servlet-mapping>
+    <servlet-mapping>
     <servlet-name>MainServlet</servlet-name>
     <url-pattern>/servlet/images</url-pattern>
+  </servlet-mapping>
+  
+  
+  <servlet>
+    <description>获取图片</description>
+    <display-name>获取图片</display-name>
+    <servlet-name>GetImage</servlet-name>
+    <servlet-class>lsl.servlet.LoadImage</servlet-class>
+  </servlet>  
+  <servlet-mapping>
+    <servlet-name>GetImage</servlet-name>
+    <url-pattern>/servlet/LoadImage/*</url-pattern>
   </servlet-mapping>
   
 </web-app>

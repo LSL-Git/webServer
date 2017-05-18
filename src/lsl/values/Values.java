@@ -10,7 +10,7 @@ public class Values {
 	public static final String UnfinishedIconPath = "D:/Images/未完成";
 	public static final String FINISHICONPATH = "D:/Images/已完成";
 	
-	public final static String httpURL = "http://127.0.0.1/webServer/servlet/images?type=get&name=";
+	public final static String httpURL = "http://127.0.0.1/webServer/servlet/LoadImage/";
 	
 	// *******************用户信息*************************
 	public static final String CR_USER_TB = "CREATE TABLE `user_tb` (" +
