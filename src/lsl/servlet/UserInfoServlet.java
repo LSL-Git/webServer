@@ -23,6 +23,8 @@ public class UserInfoServlet extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private PrintWriter out;
+	private int isManager = 0;
 
 	/**更新用户信息的URL
 	 * http://127.0.0.1/webServer/userinfo?user_name=regggr&type=update
@@ -34,27 +36,27 @@ public class UserInfoServlet extends HttpServlet{
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.out.println("UserInfo Get...");
+System.out.println("UserInfo Get...");
 		
 		String type = req.getParameter("type");
 		String user_name = req.getParameter("user_name");
-		String update_psw = req.getParameter("update_psw");
+		String origin_psw = req.getParameter("origin_psw");
+		String new_psw = req.getParameter("new_psw");
 		String update_tel = req.getParameter("update_tel");
 		String update_email = req.getParameter("update_email");
+		String isM = "" + req.getParameter("manager");
 		
-		System.out.println("type: " + type);
-		System.out.println("user_name: " + user_name);	
-		System.out.println("update_psw: " + update_psw);	
-		System.out.println("update_tel: " + update_tel);	
-		System.out.println("update_email: " + update_email);	
-		
+		if (isM.equals("YES")) {
+			isManager  = 1;
+		}	
+				
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/json");
 		// 得到数据库实例
 		DbUtils.getInstance();
 		if (type.equals("query_user_info")) {
 			try {
-				resp.setCharacterEncoding("UTF-8");
-				resp.setContentType("text/json");
-				PrintWriter out = resp.getWriter();
+				out = resp.getWriter();
 				
 				// 从数据库查询用户信息
 				JSONObject json = DbUtils.QueryUserAll(user_name);
@@ -69,10 +71,28 @@ public class UserInfoServlet extends HttpServlet{
 			}
 		} else if (type.equals("update")) {
 			// 调用更新数据库信息
-			String RESULT = DbUtils.UpDateUserInfo(user_name, update_psw, update_tel, update_email);
+			String RESULT = DbUtils.UpDateUserInfo(user_name,update_tel, update_email, isManager);
 			// 调用回馈更新结果
 			ReturnToUser.BackToUser(RESULT, resp);
+		} else if(type.equals("alter_psw")) {
+			String result = DbUtils.Login(user_name);
+			out = resp.getWriter();
+			if (result.equals(origin_psw)) {
+				out.write("1");	// 密码校对成功
+				if(DbUtils.AlterPsw(user_name, new_psw).equals("Alter_Success"))
+					out.write("2");// 修改成功
+				else
+					out.write("3");// 修改失败
+			} else {
+				System.out.println("fail");
+				out.write("0");	// 密码校对失败
+			}
+		}else if(type.equals("get_all_user_name")) { 
+			out = resp.getWriter();
+			out.println(DbUtils.GetAllUserName());
 		}
+		out.flush();
+		out.close();
 		
 	}
 

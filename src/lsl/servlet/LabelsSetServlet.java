@@ -1,7 +1,6 @@
 package lsl.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -10,24 +9,25 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONObject;
 
-import lsl.utils.ImgUtils;
+import lsl.utils.DateUtils;
+import lsl.utils.DbUtils;
+import lsl.utils.ReturnToUser;
 
-public class GetImgUrlServlet extends HttpServlet {
+public class LabelsSetServlet extends HttpServlet {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	private String type;
+	private String manageName;
+	private String taskNum;
+	private String relyNum;
+	private DbUtils db;
 	/**
-	 * Constructor of the object.
-	 */
-	public GetImgUrlServlet() {
-		super();
-	}
-
-	/**
-	 * http://127.0.0.1/webServer/servlet/images?type=GetImgUrl 获取图片的URL
+	 * The doGet method of the servlet. <br>
+	 *
+	 * This method is called when a form has its tag value method equals to get.
 	 * 
 	 * @param request the request send by the client to the server
 	 * @param response the response send by the server to the client
@@ -36,29 +36,25 @@ public class GetImgUrlServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("GetImageServlet Get...");
 		
-		String type = request.getParameter("type");
-
-		response.setContentType("text/json");
-		response.setCharacterEncoding("UTF-8");
-		PrintWriter out = response.getWriter();
+		type = request.getParameter("type");
+		relyNum = request.getParameter("relyNum");
+		taskNum = request.getParameter("taskNum");
+		manageName = request.getParameter("manageName");
+		db = DbUtils.getInstance();
 		
-		if (type.equals("GetImgUrl")) {
-			JSONObject json  = ImgUtils.getImgUrl();
-			out.println(json);
-		} else {
-			out.println("Request Err");
+		if(type.equals("getsetinfo")) {		
+			JSONObject json = db.GetNewSetInfo();
+			ReturnToUser.BackToUser(json, response);
+		} else if (type.equals("putsetinfo")) {
+			System.out.println(relyNum + "\n" + taskNum + "\n" + manageName);
+			if(db.SaveSetInfo(Integer.parseInt(relyNum), Integer.parseInt(taskNum)
+					, manageName, DateUtils.GetNowTime())) {
+				ReturnToUser.BackToUser("OK", response);
+			} else {
+				ReturnToUser.BackToUser("Fail", response);
+			}
 		}
-		//返回json类型图片数据
-//		else if(type.equals("get")){
-//			String getName = request.getParameter("name");
-//			JSONObject json = ImgUtils.getImg(getName);
-//			out.println(json);
-//		}
-		
-		out.flush();
-		out.close();
 	}
 
 	/**
@@ -73,16 +69,8 @@ public class GetImgUrlServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		this.doGet(request, response);
-	}
 
-	/**
-	 * Initialization of the servlet. <br>
-	 *
-	 * @throws ServletException if an error occurs
-	 */
-	public void init() throws ServletException {
-		//System.out.println("init()...");
+		doGet(request, response);
 	}
 
 }

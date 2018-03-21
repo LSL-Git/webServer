@@ -8,11 +8,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
-
 import lsl.utils.ImgUtils;
 
-public class GetImgUrlServlet extends HttpServlet {
+import org.json.JSONObject;
+
+public class GetTaskPicUrlServlet extends HttpServlet {
 
 	/**
 	 * 
@@ -20,14 +20,9 @@ public class GetImgUrlServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Constructor of the object.
-	 */
-	public GetImgUrlServlet() {
-		super();
-	}
-
-	/**
-	 * http://127.0.0.1/webServer/servlet/images?type=GetImgUrl 获取图片的URL
+	 * The doGet method of the servlet. <br>
+	 *
+	 * This method is called when a form has its tag value method equals to get.
 	 * 
 	 * @param request the request send by the client to the server
 	 * @param response the response send by the server to the client
@@ -36,27 +31,20 @@ public class GetImgUrlServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		System.out.println("GetImageServlet Get...");
-		
-		String type = request.getParameter("type");
+		System.out.println("GetTaskPicUrlServlet...");
 
+		String type = request.getParameter("type");
+		String userName = request.getParameter("userName");
+		
 		response.setContentType("text/json");
 		response.setCharacterEncoding("UTF-8");
 		PrintWriter out = response.getWriter();
 		
-		if (type.equals("GetImgUrl")) {
-			JSONObject json  = ImgUtils.getImgUrl();
+		if (type.equals("GetTaskPicUrl") && !userName.equals("")) {
+			JSONObject json  = ImgUtils.getTaskPicUrl(userName);
 			out.println(json);
-		} else {
-			out.println("Request Err");
+			
 		}
-		//返回json类型图片数据
-//		else if(type.equals("get")){
-//			String getName = request.getParameter("name");
-//			JSONObject json = ImgUtils.getImg(getName);
-//			out.println(json);
-//		}
-		
 		out.flush();
 		out.close();
 	}
@@ -73,16 +61,8 @@ public class GetImgUrlServlet extends HttpServlet {
 	 */
 	public void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		this.doGet(request, response);
-	}
 
-	/**
-	 * Initialization of the servlet. <br>
-	 *
-	 * @throws ServletException if an error occurs
-	 */
-	public void init() throws ServletException {
-		//System.out.println("init()...");
+		doGet(request, response);
 	}
 
 }

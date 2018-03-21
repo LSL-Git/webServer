@@ -1,128 +1,166 @@
 package lsl.utils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
-
-import lsl.values.Values;
 
 public class FileUtils {
 	DbUtils db = DbUtils.getInstance();
+	private static String parentName = "";
+	private static FileInputStream in;
+	private static FileOutputStream out;
 	
-	/**
-	 * 把未标签化的图片文件夹，便利结果保存到数据库中
-	 * @param path
-	 */
-	public static void traverseFolder2(String path) {
-        File file = new File(path);
-        if (file.exists()) {
-            File[] files = file.listFiles();
-            if (files.length == 0) {
-                System.out.println("文件夹是空的!");
-                return;
-            } else {
-                for (File file2 : files) {
-                    if (file2.isDirectory()) {
-                        System.out.println(file2.getName());
-                        //traverseFolder2(file2.getAbsolutePath());	// 递归
-                    } else {
-                    	DbUtils.getInstance();
-                    	DbUtils.SaveUnfinishedImg(file2.getName(),"lsl");
-
-                        System.out.println("文件:" + file2.getName());
-                    }
-                }
-            }
-        } else {
-            System.out.println("文件不存在!");
-        }
-    }
-
-	/**
-	 * 根据路径便利文件夹内的文件夹或文件
-	 * @param path
-	 */
-	public static void traverseFolder(String path, int id, int level, int num) {
+	public static ArrayList<String> tFolder(String path, int level) {
 		DbUtils.getInstance();
-		File file = new File(path);
+		
+		int count = 0;
+		ArrayList<String> lists = new ArrayList<String>();
+		File file = new File(path);		
 		if (file.exists()) {
 			File[] files = file.listFiles();
+
 			if (files.length == 0) {
 				System.out.println("文件夹为空！");
-			} else {
-				for (File filee : files) {	
-					if (filee.isDirectory()) {
-						System.err.println("文件夹：" + filee.getName() + " " + " level = " + level + " id = " + id );
-						if (level <= 1) {
-							id++;
-						}
-						num = FileNum(filee.getAbsolutePath(), filee.getName());
+				return lists;
+			} else {				
+				for(File file2 : files) {
+					if (file2.isDirectory()) {
+						count = Count(file2.getPath());
+						String FileName = file2.getName();
+						if (level > 1)
+							parentName = file.getName();
+						
+						DbUtils.SaveFile(level, parentName, FileName, count);	// 将文件信息保存到数据库
 
-						DbUtils.SaveFileInfo(level, id, num, filee.getName());
+						lists.add(file2.getPath());		// 将文件夹路径保存到链表中
 
 					} else {
-						System.out.println(filee.getName());
+						String parentFile = file.getName();
+						String picName = file2.getName();
+
+						if (!picName.substring(picName.length() - 2, picName.length()).equals("db")) {
+							DbUtils db = DbUtils.getInstance();
+							db.SavePicInfo(parentFile, picName, parentFile);	// 保存图片信息
+						}
+
 					}
 				}
 			}
 		} else {
-			System.out.println("文件不存在！");
+			System.out.println("文件路径不存在！");
 		}
 
-	}
+		return lists;
+	}	
 	
-	/**
-	 * 返回一个文件夹路径内的文件数量
-	 * @param FolderPath
-	 * @return
-	 */
-	public static int FileNum(String FolderPath, String par_name) {
-		int num = 0;
-		File file = new File(FolderPath);
+	private static int Count(String filepath) {
+		int count = 0;
+		File file = new File(filepath);
 		if (file.exists()) {
 			File[] files = file.listFiles();
+
 			if (files.length == 0) {
 				System.out.println("文件夹为空！");
 				return 0;
 			} else {				
-				for (File filee : files) {				
-					if (filee.isDirectory()) {
-						num++;
+				for(File file2 : files) {
+					if (file2.isDirectory()) {
+						count++;
 					} else {
-						String name = filee.getName();
-						if (!name.substring(name.length() - 2, name.length()).equals("db")) {
-							DbUtils.getInstance();
-							DbUtils.SaveImgInfo(par_name, name, par_name);
-							System.out.println("par_name:" + par_name + "  label:" + par_name + "  name:" + name);
-							num++;
+						String fileName = file2.getName();
+						System.out.println(fileName);
+						if (!fileName.substring(fileName.length() - 2, fileName.length()).equals("db")) {
+							count++;							
 						}
-						System.out.println(name);
 					}
 				}
 			}
-		} else {
-			System.out.println("文件不存在！");
 		}
-		return num;
+		
+		return count;
 	}
 	
 	/**
-	 * 根据文件目录级便利数据库，并查找下一级是否有文件，有则存储到数据库中
-	 * @param level
+	 * 根据图片路径保存原有未标签化图片的信息
+	 * @param filePath
 	 */
-	public static void f(int level) {
-		int i = 0;
-		String id = "";
-		String name = "";
-		DbUtils.getInstance();
-		ArrayList<String> list = DbUtils.GetIdAndFileName(level);
-		
-		for(;i < list.size();){
-			id = list.get(i);
-			name = list.get(i + 1);
-			i += 2;
-			traverseFolder(Values.FINISHICONPATH + "/" + name, Integer.parseInt(id), level + 1, 0);
+	public static void TraverseUnfinishPicFolder(String filePath) {
+		File file = new File(filePath);
+		if (file.exists()) {
+			File[] files = file.listFiles();
+			if (files.length == 0) {
+				System.out.println("文件夹是空的");
+				return;
+			} else {
+				for (File file2 : files) {
+					if (file2.isDirectory()) {
+						System.out.println("文件夹：" + file2.getName());
+					} else {
+						System.out.println("文件：" + file2.getName());
+						DbUtils.getInstance();
+						DbUtils.SaveUnfinishedPicInfo(file2.getName(), 0, DateUtils.GetNowTime());
+					}
+				}
+			}
+			     
 		}
 	}
+	
+	/**
+	 * 将已完成标签化的图片全部保存到数据库	
+	 * @param lists
+	 * @param level
+	 */
+	public static void f(ArrayList<String> lists,int level) {
+		level++;
+		for (int i = 0; i < lists.size(); i++) {
+			ArrayList<String> list = FileUtils.tFolder(lists.get(i),level);
+
+			if (list.size() > 0) {
+				f(list,level);
+			}
+		}
+	}
+	
+	
+	/**
+	 * 根据新老路径复制文件
+	 * @param oldPath
+	 * @param newPath
+	 */
+	public static void copyFolder(String oldPath, String newPath) {
+		int num = 0;
+        try {
+        	in = new FileInputStream(oldPath);	// 源文件
+        	out = new FileOutputStream(newPath);// 复制生成文件
+        	byte[] buf = new byte[1024];
+        	int len = 0;
+        	while ((len = in.read(buf)) != -1) {
+        		out.write(buf, 0, len);	// 复制
+        		num++;
+        	}
+
+        } catch (Exception e) {
+			System.out.println("copyFolder...");
+			e.printStackTrace();
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			try {
+				if (out != null) {
+					out.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+    }
 
 
 }

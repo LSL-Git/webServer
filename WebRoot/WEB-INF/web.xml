@@ -50,7 +50,7 @@
   </servlet>
     <servlet-mapping>
     <servlet-name>MainServlet</servlet-name>
-    <url-pattern>/servlet/images</url-pattern>
+    <url-pattern>/images</url-pattern>
   </servlet-mapping>
   
   
@@ -58,11 +58,66 @@
     <description>获取图片</description>
     <display-name>获取图片</display-name>
     <servlet-name>GetImage</servlet-name>
-    <servlet-class>lsl.servlet.LoadImage</servlet-class>
-  </servlet>  
+    <servlet-class>lsl.servlet.LoadImageServlet</servlet-class>
+  </servlet>    
   <servlet-mapping>
     <servlet-name>GetImage</servlet-name>
-    <url-pattern>/servlet/LoadImage/*</url-pattern>
+    <url-pattern>/LoadImage/*</url-pattern>
+  </servlet-mapping>
+  
+  
+    <servlet>
+    <description>支持批量上传</description>
+    <display-name>用户上传图片</display-name>
+    <servlet-name>UploadImages</servlet-name>
+    <servlet-class>lsl.servlet.UploadImagesServlet</servlet-class>
+  </servlet>
+  
+  <servlet>
+    <description>获取所有已完成标签化图片的种类和数量</description>
+    <display-name>获取所有已完成标签化图片的种类和数量</display-name>
+    <servlet-name>GetPicTypeNum</servlet-name>
+    <servlet-class>lsl.servlet.GetPicTypeNum</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>GetPicTypeNum</servlet-name>
+    <url-pattern>/GetPicInfo</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <description>获取任务图片URL列表</description>
+    <display-name>获取任务图片URL列表</display-name>
+    <servlet-name>GetTaskPicUrlServlet</servlet-name>
+    <servlet-class>lsl.servlet.GetTaskPicUrlServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <display-name>提交标签</display-name>
+    <servlet-name>LabelsServlet</servlet-name>
+    <servlet-class>lsl.servlet.LabelsServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <description>设置标签过程相关值</description>
+    <servlet-name>LabelsSetServlet</servlet-name>
+    <servlet-class>lsl.servlet.LabelsSetServlet</servlet-class>
+  </servlet>
+
+
+  <servlet-mapping>
+    <servlet-name>UploadImages</servlet-name>
+    <url-pattern>/UploadImages</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GetTaskPicUrlServlet</servlet-name>
+    <url-pattern>/GetTaskPicUrlServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LabelsServlet</servlet-name>
+    <url-pattern>/PicLabelServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LabelsSetServlet</servlet-name>
+    <url-pattern>/LabelsSetServlet</url-pattern>
   </servlet-mapping>
   
 </web-app>

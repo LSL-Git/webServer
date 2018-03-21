@@ -20,14 +20,14 @@ public class ReturnToUser {
 	 * @param RESULT
 	 * @param resp
 	 */
-	public static void BackToUser(String RESULT, HttpServletResponse resp) {
+	public static void BackToUser(Object RESULT, HttpServletResponse resp) {
 		try {
 			resp.setCharacterEncoding("UTF-8");
 			resp.setContentType("text/json");
 			PrintWriter out = resp.getWriter();
 			
 			Map<String, String> map = new HashMap<String, String>();
-			map.put("result", RESULT);
+			map.put("result", RESULT + "");
 			
 			JSONObject json = new JSONObject(map);
 			// 向用户写回数据
